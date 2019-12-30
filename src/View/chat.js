@@ -133,9 +133,7 @@ this.setState({
         return(
             <div>
                
-               
-               <GridContainer>
-        <GridItem xs={12} sm={6} md={3}>
+           
     
 
       {this.state.openchat?<div>
@@ -207,10 +205,7 @@ this.setState({
     
       </FormGroup>}
               
-                   </GridItem>
-           
-                   </GridContainer>
-                    
+                
                  
               
              
