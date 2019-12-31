@@ -73,35 +73,33 @@ class Chat extends Component{
              })
          }) 
     }
-    back(){
-        var   constraints;
-this.state.camera = !this.state.camera
-console.log(this.state.camera)
-if(this.state.camera === true)
-{
-    constraints = {
+      back(value){
+        var screenTrack = document.querySelector('video').srcObject;
+        if(value === false)
+        {
           
-        facingMode:{exact:'environment'}
-    
-}
-}
-if(this.state.camera === false)
-{
-    constraints = {
-          
-        facingMode:'user'
-    
-}
-}
-   
-        this.state.connection.applyConstraints({
-            video: constraints
-        });
+            var videoConstraints = {
+               facingMode: { exact: 'environment' }
+           };
        
-console.log(this.state.connection)
-       
-       
+           screenTrack.getTracks().forEach(function(track) {
+               if(track.kind === 'video') {
+                   track.applyConstraints(videoConstraints);
+               }
+           });
+        }
+  if(value === true){
+    var videoConstraints = {
+        facingMode: 'user' 
+    };
 
+    screenTrack.getTracks().forEach(function(track) {
+        if(track.kind === 'video') {
+            track.applyConstraints(videoConstraints);
+        }
+    });
+
+  }
     }
     handleChangeagree(value){
 
@@ -140,7 +138,7 @@ this.setState({
 
         {this.state.openbutton?  <Button onClick = {this.call}>Call</Button>:null}
              <div id="videos-container" ></div>
-         {this.state.openrecordbutton?<Button onClick = {this.back}>Back</Button>:null}
+         {this.state.openrecordbutton?<div><Button onClick = {()=>this.back(false)}>Back</Button><Button onClick = {()=>this.back(true)}>Front</Button></div>:null}
       </div>:    <FormGroup row>
         <p>
         <div><Checkbox checked={this.state.checked} onChange={(e)=>this.handleChangeagree(e)} value="checkedA" />By clicking this,you agree the <span onClick = {this.openterms}><Link>Terms and conditions</Link></span> </div></p>
