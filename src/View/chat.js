@@ -93,15 +93,15 @@ class Chat extends Component{
         var screenTrack = document.querySelector('video').srcObject;
       
           this.setState({
-              camera:'environment'
+              camera:'user'
           })
             var videoConstraints = {
-               facingMode: { exact: this.state.camera }
+               facingMode:  this.state.camera 
            };
        
          const  track =  screenTrack.getVideoTracks()[0]
                if(track.kind === 'video') {
-                   track.applyConstraints(videoConstraints);
+                   this.state.connection.applyConstraints(videoConstraints);
                }
            
  
