@@ -8,7 +8,7 @@ import 'socket.io-client'
 
 
 import connection from '../Connection.js'
-import 'webrtc-adapter'
+import adapter from 'webrtc-adapter';
 import GridContainer from '../Components/Grid/GridContainer.js';
 import GridItem from '../Components/Grid/GridItem.js'
 import './view.css'
@@ -28,12 +28,16 @@ class Chat extends Component{
         this.state = {
             openbutton:true,
             openrecordbutton:false,
-            camera:false,
+            camera:'user',
             checked:false,
             openchat:false,
             opencondition:false,
             opencamera:false,
-            openmodal:false
+            openmodal:false,
+            bitrate:'4000',
+            framerate:'30',
+            resolution:'720',
+            room:''
            
         }
         this.call = this.call.bind(this)
@@ -42,64 +46,66 @@ class Chat extends Component{
         this.openterms = this.openterms.bind(this)
         this.handleClosemodal = this.handleClosemodal.bind(this)
     }
-  
+  componentDidMount(){
+      console.log(adapter)
+    console.log(this.props.roomid.split("."))  
+    var s  = this.props.roomid.split(".")
+     this.setState({
+         bitrate:s[1],
+         framerate:s[2],
+         resolution:s[3],
+         room:s[0]
+     })
+  }
     call(){
-   console.log(connection)  
+     
         this.state.connection = connection;
   
        var s = this.state.env
+    
            this.state.connection.videosContainer = document.getElementById('videos-container');
   
            this.state.connection.mediaConstraints = {
               audio: true,
               video: {
-                mandatory: {
-                   
-                    minHeight: 720,
-                    maxHeight: 720,
-                    minFrameRate: 30,
-                },
-                optional: [{
-                    facingMode: 'user' // or "application"
-                }]
-                                  
+            
+                
+                    minWidth: 1280,
+                    maxWidth: 1280,
+                    minHeight: this.state.resolution,
+                    maxHeight: this.state.resolution,
+                    minFrameRate: this.state.framerate,
+                    maxFrameRate:this.state.framerate,
+                    facingMode: this.state.camera
+               
               }
           };
        
-          this.state.connection.open(this.props.roomid,()=>{
+          this.state.connection.open(this.state.room,()=>{
+          
              this.setState({
                  openbutton:false,
                  openrecordbutton:true
              })
          }) 
     }
-      back(value){
+    back(value){
         var screenTrack = document.querySelector('video').srcObject;
-        if(value === false)
-        {
-          
+      
+          this.setState({
+              camera:'environment'
+          })
             var videoConstraints = {
-               facingMode: { exact: 'environment' }
+               facingMode: { exact: this.state.camera }
            };
        
-           screenTrack.getTracks().forEach(function(track) {
+         const  track =  screenTrack.getVideoTracks()[0]
                if(track.kind === 'video') {
                    track.applyConstraints(videoConstraints);
                }
-           });
-        }
-  if(value === true){
-    var videoConstraints = {
-        facingMode: 'user' 
-    };
-
-    screenTrack.getTracks().forEach(function(track) {
-        if(track.kind === 'video') {
-            track.applyConstraints(videoConstraints);
-        }
-    });
-
-  }
+           
+ 
+  
     }
     handleChangeagree(value){
 
@@ -131,7 +137,9 @@ this.setState({
         return(
             <div>
                
-           
+               
+               <GridContainer>
+        <GridItem xs={12} sm={6} md={3}>
     
 
       {this.state.openchat?<div>
@@ -203,7 +211,10 @@ this.setState({
     
       </FormGroup>}
               
-                
+                   </GridItem>
+           
+                   </GridContainer>
+                    
                  
               
              
