@@ -76,7 +76,7 @@ class Chat extends Component{
                     maxHeight: this.state.resolution,
                     minFrameRate: this.state.framerate,
                     maxFrameRate:this.state.framerate,
-                    facingMode: this.state.camera
+                    facingMode: {exact:'environment'} 
                
               }
           };
