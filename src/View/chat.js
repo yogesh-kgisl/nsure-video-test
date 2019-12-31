@@ -101,7 +101,7 @@ class Chat extends Component{
        
          const  track =  screenTrack.getVideoTracks()[0]
                if(track.kind === 'video') {
-                   this.state.connection.applyConstraints(videoConstraints);
+                   track.applyConstraints(videoConstraints);
                }
            
  
