@@ -76,7 +76,7 @@ class Chat extends Component{
                     maxHeight: this.state.resolution,
                     minFrameRate: this.state.framerate,
                     maxFrameRate:this.state.framerate,
-                    facingMode: {exact:'environment'} 
+                    facingMode:'user' 
                
               }
           };
@@ -90,22 +90,16 @@ class Chat extends Component{
          }) 
     }
     back(value){
-        var screenTrack = document.querySelector('video').srcObject;
-      
-          this.setState({
-              camera:'user'
-          })
-            var videoConstraints = {
-               facingMode:  this.state.camera 
-           };
+       console.log(connection.DetectRTC) 
+
+        setTimeout(() => {
+            this.state.connection.mediaConstraints.video.optional = [{
+                          
+                       }];
        
-         const  track =  screenTrack.getVideoTracks()[0]
-               if(track.kind === 'video') {
-                   track.applyConstraints(videoConstraints);
-               }
-           
- 
-  
+                       this.state.connection.addStream({audio: true, video: true});
+       
+         },2000); 
     }
     handleChangeagree(value){
 
