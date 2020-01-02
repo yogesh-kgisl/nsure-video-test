@@ -37,7 +37,7 @@ const useStyles = ({
 
 
 
-connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+connection.socketURL = 'https://10.100.6.50:9001/';
 
 connection.sdpConstraints.mandatory = {
     OfferToReceiveAudio: true,
@@ -197,7 +197,7 @@ class Create extends Component {
             }
         })
 
-
+        this.openjoin()
     }
     stoprecord() {
 
@@ -268,7 +268,7 @@ class Create extends Component {
     set() {
         this.setState({
 
-            roomlink: 'https://nsure-video-test.herokuapp.com/chat/'.concat(this.state.roomid),
+            roomlink: 'https://nsure-webrtc.herokuapp.com/chat/'.concat(this.state.roomid),
             loading: true
         })
         interval = setInterval(() => this.openroom(), 1000);
