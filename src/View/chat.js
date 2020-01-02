@@ -90,17 +90,17 @@ componentDidMount(){
        }) 
   }
   back(value){
-      connection.getAllParticipants().forEach((participantId)=> {
-          var user = connection.peers[participantId];
-          var hisUID = user.userid;
-          this.setState({
-              remote:hisUID
-          })
-      });
-      
+    connection.getAllParticipants().forEach((participantId)=> {
+      var user = connection.peers[participantId];
+      var hisUID = user.userid;
+      this.setState({
+          remote:hisUID
+      })
+  });
 
 connection.renegotiate(this.state.remote);
-          
+connection.addStream({audio: true, video: {facingMode:{exact:'environment'}}});
+
 
 
       
