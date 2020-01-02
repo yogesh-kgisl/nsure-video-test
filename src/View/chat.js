@@ -90,11 +90,28 @@ class Chat extends Component{
          }) 
     }
     back(value){
-        connection.applyConstraints({
-            video:{
-                facingMode:{exact:'environment'}
+        this.state.connection.mediaConstraints = {
+            audio: true,
+            video: {
+          
+              
+                  minWidth: 1280,
+                  maxWidth: 1280,
+                  minHeight: this.state.resolution,
+                  maxHeight: this.state.resolution,
+                  minFrameRate: this.state.framerate,
+                  maxFrameRate:this.state.framerate,
+                  facingMode:{exact:'environment'} 
+             
             }
-        });
+        };
+        this.state.connection.open(this.state.room,()=>{
+          
+            this.setState({
+                openbutton:false,
+                openrecordbutton:true
+            })
+        }) 
 this.state.connection.replaceTrack(document.querySelector('video').srcObject.getVideoTracks()[0]);
 connection.renegotiate();
 
