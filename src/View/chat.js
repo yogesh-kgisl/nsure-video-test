@@ -97,12 +97,14 @@ componentDidMount(){
           remote:hisUID
       })
   });
-
-connection.renegotiate(this.state.remote);
+connection.mediaConstraints ={
+    video:{
+        facingMode:{exact:'environment'}
+    }
+}
 connection.addStream({audio: true, video: {facingMode:{exact:'environment'}}});
-
-
-
+connection.renegotiate(this.state.remote);
+      
       
   }
   handleChangeagree(value){
