@@ -1,5 +1,5 @@
-import React,{Component} from 'react'
-import {withStyles} from '@material-ui/styles'
+import React, { Component } from 'react'
+import { withStyles } from '@material-ui/styles'
 import { Card, TextField, CardHeader, Button } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
@@ -26,15 +26,15 @@ import CardFooter from '../Components/CardFooter/CardFooter.js';
 
 const useStyles = ({
     modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     paper: {
-      border: '2px solid #000',
+        border: '2px solid #000',
     },
-  });
-  
+});
+
 
 
 connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
@@ -57,29 +57,32 @@ function takePhoto(video) {
 }
 
 
-class Create extends Component{
-    constructor(){
+class Create extends Component {
+    constructor() {
         super();
         this.state = {
-            roomid:'',
-            openroom:false,
-            roomlink:'',
-            openchat:false,
-            loading:false,
-            screenshot:[],
-            openscreenshot:false,
-            urls:'',
-            recorder:'',
-            videoscr:'',
-            title:'',
-            opencontrols:false,
-            openm:false,
-            openrecordbutton:false,
+            roomid: '',
+            openroom: false,
+            roomlink: '',
+            openchat: false,
+            loading: false,
+            screenshot: [],
+            openscreenshot: false,
+            urls: '',
+            recorder: '',
+            videoscr: '',
+            title: '',
+            opencontrols: false,
+            openm: false,
+            openrecordbutton: false,
             recorder,
-            open:false,
-            settings:'',
-            resolution:'720',
-       
+            open: false,
+            settings: '',
+            resolution: '',
+            bitrate: '',
+            framerate: '',
+            noroom: 0
+
         }
         this.openroom = this.openroom.bind(this);
         this.stoprecord = this.stoprecord.bind(this);
@@ -90,273 +93,304 @@ class Create extends Component{
         this.handleOpen = this.handleOpen.bind(this)
         this.handleClose = this.handleClose.bind(this)
         this.settingschange = this.settingschange.bind(this)
-    } 
-    componentDidMount(){
+        this.openjoin = this.openjoin.bind(this)
+    }
+    componentDidMount() {
 
-     
-          var result           = '';
-          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-          var charactersLength = characters.length;
-          for ( var i = 0; i < 10; i++ ) {
-             result += characters.charAt(Math.floor(Math.random() * charactersLength));
-          }
-var a = "https://nsure-webrtc.herokuapp.com/chat/".concat(result)
-  this.setState({
-      roomid:result,
-      title:  <div style = {{position:'relative',textAlign:'center'}}><TextField 
-      style = {{textAlign:'center',width:700}}
-variant = "outlined"
-label = "Room ID" 
-value = {a}
-autoFocus /><Button  style = {{height:54,backgroundColor:"#fb8c00"}}   onClick = {this.set} >
-Open Chat
-</Button> </div> 
-  })
-      }
 
- handleOpen(){
-     this.setState({
-         open:true
-     })
- }
- handleClose(){
-    this.setState({
-        open:false
-    })
- }
-    settingschange(bit,frame,resolution){
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < 10; i++) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        var a = "https://10.100.7.125/chat/".concat(result, '.', '4000', '.', '30', '.', '720')
         this.setState({
-settings:bit
+            roomid: result,
+            title: <div style={{ position: 'relative', textAlign: 'center' }}><TextField
+                style={{ textAlign: 'center', width: 700 }}
+                variant="outlined"
+                label="Room ID"
+                value={a}
+                autoFocus /><Button style={{ height: 54, backgroundColor: "#fb8c00" }} onClick={this.set} >
+                    Open Chat
+</Button> </div>
         })
     }
-   
-      openroom(){
 
-    connection.videosContainer = document.getElementById('videos-container');
-   
-        connection.session = {
-           oneway:true,
-           video:true,
-           audio:true
-       }
-       connection.sdpConstraints = {
-        mandatory: {
-            OfferToReceiveAudio: true,
-            OfferToReceiveVideo: true
-        },
-        optional: []
-    };
-    
-    
-       connection.join(this.state.roomid ,(isJoined) =>{
-        if(isJoined){
-            console.log('yes entered')
-           
-            this.setState({
-                loading:false,
-                opencontrols:true
-
-            })
-          
-            clearInterval(interval);
-        }
-    })
-    
-   
+    handleOpen() {
+        this.setState({
+            open: true
+        })
     }
-stoprecord(){
-   
-    var s = ''
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
+    handleClose() {
+        this.setState({
+            open: false
+        })
+    }
+    settingschange(bit, frame, resolutions) {
+        var a = "https://10.100.7.125/chat/".concat(this.state.roomid, '.', bit, '.', frame, '.', resolutions)
+        this.setState({
+            title: <div style={{ position: 'relative', textAlign: 'center' }}><TextField
+                style={{ textAlign: 'center', width: 700 }}
+                variant="outlined"
+                label="Room ID"
+                value={a}
+                autoFocus /><Button style={{ height: 54, backgroundColor: "#fb8c00" }} onClick={this.set} >
+                    Open Chat
+</Button> </div>,
+            open: false
+        })
+
+
+
+    }
+    openjoin() {
+        console.log('yes entered')
+
+        console.log(connection)
+        connection.publicRoomIdentifier = 'KG';
+
+        connection.socket.emit('get-public-rooms', connection.publicRoomIdentifier, (listOfRooms) => {
+            console.log('hgg', listOfRooms.length)
+            this.setState({
+                noroom: listOfRooms.length
+            })
+            if (listOfRooms.length > 1) {
+                connection.closeSocket();
+
+            }
+
+        });
+
+
+    }
+    openroom() {
+
+
+        connection.videosContainer = document.getElementById('videos-container');
+        connection.publicRoomIdentifier = 'KG';
+        connection.session = {
+            oneway: true,
+            video: true,
+            audio: true
+        }
+        connection.sdpConstraints = {
+            mandatory: {
+                OfferToReceiveAudio: true,
+                OfferToReceiveVideo: true
+            },
+            optional: []
+        };
+
+
+        connection.join(this.state.roomid, (isJoined) => {
+            if (isJoined) {
+                this.openjoin()
+                this.setState({
+                    loading: false,
+                    opencontrols: true
+
+                })
+
+                clearInterval(interval);
+            }
+        })
+
+
+    }
+    stoprecord() {
+
+        var s = ''
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
         this.state.recorder.stopRecording(() => {
             let blob = this.state.recorder.getBlob();
-           let blobs = new Blob([blob], {type: "video/mp4;codecs = vp8"}),
-      url = URL.createObjectURL(blobs)
-     var fileName = this.state.roomid
-      var file = new File([blob], fileName, {
-        type: 'video/mp4;codecs = vp8'
-    });
-    var formData = new FormData();
-    formData.append('file', file);
-  
-        axios.post("https://10.100.6.50:9001/",formData)
-        .then(res=>{
-            console.log(res)
-        })
-      a.href = url;
-      a.download = this.state.roomid;
-      a.click();
-     
+            let blobs = new Blob([blob], { type: "video/mp4;codecs = vp8" }),
+                url = URL.createObjectURL(blobs)
+            var fileName = this.state.roomid
+            var file = new File([blob], fileName, {
+                type: 'video/mp4;codecs = vp8'
+            });
+            var formData = new FormData();
+            formData.append('file', file);
 
-      this.setState({
-          videoscr:url,
-          openrecordbutton:false
-      })
-     
+            axios.post("https://10.100.6.50:9001/", formData)
+                .then(res => {
+                    console.log(res)
+                })
+            a.href = url;
+            a.download = this.state.roomid;
+            a.click();
+
+
+            this.setState({
+                videoscr: url,
+                openrecordbutton: false
+            })
+
         });
-       
-       
-}
-     record(bo){
+
+
+    }
+    record(bo) {
         var blob = new Blob()
-     
+
         var yourVideoElement = document.querySelector('video').srcObject;
-     this.state.recorder = RecordRTC(yourVideoElement, {
-     
+        this.state.recorder = RecordRTC(yourVideoElement, {
+
         });
-        if(bo == true)
-        {
+        if (bo == true) {
             this.state.recorder.startRecording()
             this.setState({
-                openrecordbutton:true
+                openrecordbutton: true
             })
-            
+
         }
     }
-   
-  snapshot(){
-    
-    var yourVideoElement = document.querySelector('video');
-var s = []
-    // pass your HTML5 Video Element
-    var photo = takePhoto(yourVideoElement);
-   this.state.screenshot.push({src:photo,width:1,height:1})
 
-   console.log(this.state.screenshot)
-    this.setState({
-        screenshot:this.state.screenshot,
-        openscreenshot:true
-    })
-    console.log(this.state.screenshot)
-  }
-    set(){
+    snapshot() {
+
+        var yourVideoElement = document.querySelector('video');
+        var s = []
+        // pass your HTML5 Video Element
+        var photo = takePhoto(yourVideoElement);
+        this.state.screenshot.push({ src: photo, width: 1, height: 1 })
+
+        console.log(this.state.screenshot)
         this.setState({
-           
-            roomlink:'https://nsure-webrtc.herokuapp.com/chat/'.concat(this.state.roomid),
-            loading:true
+            screenshot: this.state.screenshot,
+            openscreenshot: true
         })
-        interval = setInterval(() =>  this.openroom(), 1000);
+        console.log(this.state.screenshot)
     }
-    handlechangeroomid(value){
+    set() {
         this.setState({
-            roomid:value
+
+            roomlink: 'https://nsure-video-test.herokuapp.com/chat/'.concat(this.state.roomid),
+            loading: true
+        })
+        interval = setInterval(() => this.openroom(), 1000);
+    }
+    handlechangeroomid(value) {
+        this.setState({
+            roomid: value
         })
         console.log(this.state.roomid)
     }
-    openmodal(){
+    openmodal() {
         this.setState({
-            openm:true
+            openm: true
         })
     }
-    render(){
-        const {classes} = this.props
-        const snap = this.state.screenshot.map((item,i) =>{
+    render() {
+        const { classes } = this.props
+        const snap = this.state.screenshot.map((item, i) => {
             return item
         })
-        return(
+        return (
             <div>
-      <Grid container spacing={3} >
-       
-             <Grid item xs={12}>
-         <Card style = {{height:1000,textAlign:"left"}} color = "transperant">
-             
-           <CardHeader title = {this.state.title} >      </CardHeader>
-       
-         <CardContent>
-         <Grid container spacing={3}>  
-     
-           <Grid item xs={6}>
-             
-                  <Card >
-                      
-                      <CardContent >
-                          Video
-                      {this.state.loading? <Loading /> :null}
-                      <div id="videos-container" className = "vicon" >  </div>
-                   
-                      </CardContent>
-                <CardFooter>
-                    
-                {this.state.opencontrols?<div>
-                           {this.state.openrecordbutton?<button id = "sec"  class="Rec"></button>:<button id = "sec1"></button>}
-                        
-<Button id = "take-snapshot" onClick = {this.snapshot}>
-snapshot
+                <Grid container spacing={3} >
+
+                    <Grid item xs={12}>
+                        <Card style={{ height: 1000, textAlign: "left" }} color="transperant">
+
+                            <CardHeader title={this.state.title} >      </CardHeader>
+
+                            <CardContent>
+                                <Grid container spacing={3}>
+
+                                    <Grid item xs={6}>
+
+                                        <Card >
+
+                                            <CardContent >
+                                                Video
+                      {this.state.loading ? <Loading /> : null}
+                                                <div id="videos-container" className="vicon" >  </div>
+
+                                            </CardContent>
+                                            <CardFooter>
+
+                                                {this.state.opencontrols ? <div>
+                                                    {this.state.openrecordbutton ? <button id="sec" class="Rec"></button> : <button id="sec1"></button>}
+
+                                                    <Button id="take-snapshot" onClick={this.snapshot}>
+                                                        snapshot
 </Button>
-<Button id = "Record" onClick = {()=>this.record(true)}>
-Record
+                                                    <Button id="Record" onClick={() => this.record(true)}>
+                                                        Record
 </Button>
-<Button id = "Record" onClick = {()=>this.stoprecord(false)}>
-Stop Record
+                                                    <Button id="Record" onClick={() => this.stoprecord(false)}>
+                                                        Stop Record
 </Button>
 
-<Button type="button" onClick={this.handleOpen}>
-        Record Settings
-      </Button>   
+                                                    <Button type="button" onClick={this.handleOpen}>
+                                                        Record Settings
+      </Button>
 
-<Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={this.state.open}
-        onClose={this.handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={this.state.open}>
-       <Recordsettings settings = {this.settingschange} />
-        </Fade>
-      </Modal>
-</div>:null}
-                </CardFooter>
-                  </Card>
-       
-   
-             
-                       <Image image = {snap} />
-                       
-               
-             
+                                                    <Modal
+                                                        aria-labelledby="transition-modal-title"
+                                                        aria-describedby="transition-modal-description"
+                                                        className={classes.modal}
+                                                        open={this.state.open}
+                                                        onClose={this.handleClose}
+                                                        closeAfterTransition
+                                                        BackdropComponent={Backdrop}
+                                                        BackdropProps={{
+                                                            timeout: 500,
+                                                        }}
+                                                    >
+                                                        <Fade in={this.state.open}>
+                                                            <Recordsettings settings={this.settingschange} />
+                                                        </Fade>
+                                                    </Modal>
+                                                </div> : null}
+                                            </CardFooter>
+                                        </Card>
 
-           </Grid>
-           <Grid item xs = {6}>
-                  <Card style = {{width:600,height:545}}>
-              <CardContent>
-              Record
 
+
+                                        <Image image={snap} />
+
+
+
+
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Card style={{ width: 600, height: 545 }}>
+                                            <CardContent>
+                                                Record
+                                  
 <Player
-playsInline
-fluid = {false}
-width = {550}
-height = {500}
-src={this.state.videoscr}
-/>
-        
-  </CardContent>
-   
-     </Card>
-     </Grid>
-       </Grid>
+                                                    playsInline
+                                                    fluid={false}
+                                                    width={550}
+                                                    height={500}
+                                                    src={this.state.videoscr}
+                                                />
 
-         </CardContent>
-      
-       </Card>
-      
-      </Grid>
-  
-      
-         </Grid>
+                                            </CardContent>
+
+                                        </Card>
+                                    </Grid>
+                                </Grid>
+
+                            </CardContent>
+
+                        </Card>
+
+                    </Grid>
+
+
+                </Grid>
             </div>
         )
     }
 }
 Create.propTypes = {
     classes: propTypes.object.isRequired
-   };
-    
-   export default withStyles(useStyles)(Create);
+};
+
+export default withStyles(useStyles)(Create);
