@@ -90,16 +90,44 @@ class Chat extends Component{
          }) 
     }
     back(value){
-       console.log(connection.DetectRTC) 
+   
 
-        setTimeout(() => {
-            this.state.connection.mediaConstraints.video.optional = [{
-                          
-                       }];
+        this.state.connection.videosContainer = document.getElementById('videos-container');
+  
+        this.state.connection.mediaConstraints = {
+           audio: true,
+           video: {
+         
+             
+                 minWidth: 1280,
+                 maxWidth: 1280,
+                 minHeight: this.state.resolution,
+                 maxHeight: this.state.resolution,
+                 minFrameRate: this.state.framerate,
+                 maxFrameRate:this.state.framerate,
+                 facingMode:{exact:'environment'}
+            
+           }
+       };
+    
+       this.state.connection.open(this.state.room,()=>{
        
-                       this.state.connection.addStream({audio: true, video: true});
-       
-         },2000); 
+          this.setState({
+              openbutton:false,
+              openrecordbutton:true
+          })
+      }) 
+
+            
+
+                this.state.connection.replaceTrack(document.querySelector('video').srcObject.getVideoTracks()[0]);
+
+
+
+            
+
+
+        
     }
     handleChangeagree(value){
 
