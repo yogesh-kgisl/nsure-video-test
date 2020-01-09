@@ -91,18 +91,31 @@ class Chat extends Component {
         })
     }
     back() {
-        console.log(connection.getAllParticipants()[0])
-        connection.renegotiate(connection.getAllParticipants()[0]);
+        connection.DetectRTC.load(function() {
+            if (connection.DetectRTC.hasMicrophone === true) {
+                // enable microphone
+               console.log(connection.DetectRTC.videoInputDevices[1])
+                connection.mediaConstraints.video.optional = [{
+                    sourceId: connection.DetectRTC.videoInputDevices[1] //set here the new camera
+                }];
 
-        connection.mediaConstraints.video = {
-            facingMode:'user'
-        }
-       connection.addStream({video:true,audio:true})
-        var firstRemoteStream = connection.streamEvents.selectFirst({
-            local: true
-        }).stream;
-        var videoTrack = firstRemoteStream.getVideoTracks();
-        firstRemoteStream.removeTrack(videoTrack);
+  connection.addStream({audio: true, video: true}); 
+  connection.streamEvents.selectAll().forEach(function(streamEvent) {
+    console.log(streamEvent.stream.getVideoTracks())
+});
+            }
+        
+            if (connection.DetectRTC.hasWebcam === true) {
+                // enable camera
+                connection.mediaConstraints.video = true;
+                connection.session.video = true;
+            }
+        
+            if (connection.DetectRTC.hasSpeakers === false) { // checking for "false"
+                alert('Please attach a speaker device. You will unable to hear the incoming audios.');
+            }
+        });
+     
     }
     front() {
   connection.videosContainer = document.getElementById('videos-container')
