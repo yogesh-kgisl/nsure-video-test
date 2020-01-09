@@ -39,7 +39,7 @@ class Chat extends Component {
             framerate: '30',
             resolution: '720',
             room: '',
-            openchating:false,
+            openchating:true,
             opencont:true
 
         }
