@@ -96,13 +96,11 @@ class Chat extends Component {
                 // enable microphone
                console.log(connection.DetectRTC.videoInputDevices[1])
                 connection.mediaConstraints.video = {
-                    sourceId: connection.DetectRTC.videoInputDevices[1] //set here the new camera
+                   facingMode:{exact:'environment'} //set here the new camera
                 }
 
   connection.addStream({audio: true, video: true}); 
-  connection.streamEvents.selectAll().forEach(function(streamEvent) {
-    console.log(streamEvent.stream.getVideoTracks())
-});
+  
             }
         
             if (connection.DetectRTC.hasWebcam === true) {
@@ -118,17 +116,11 @@ class Chat extends Component {
      
     }
     front() {
-  connection.videosContainer = document.getElementById('videos-container')
-        var b = document.getElementsByTagName('video');
-       console.log(b)
-     connection.mediaConstraints.video = {
-            facingMode:'user'
-        }
-       connection.addStream({video:true,audio:true})
-       
-       this.setState({
-           opencont:false
-       }) 
+        connection.mediaConstraints.video = {
+            facingMode:'user' //set here the new camera
+         }
+
+connection.addStream({audio: true, video: true}); 
     }
     handleChangeagree(value) {
 
