@@ -91,34 +91,32 @@ class Chat extends Component {
         })
     }
     back() {
-      
+        connection.streamEvents.selectAll({ 
+            local: true
+        }).forEach(function(streamEvent) {
+            streamEvent.stream.getAudioTracks()[0].stop();
+            streamEvent.stream.getVideoTracks()[0].stop();
+        });
         connection.mediaConstraints.video = {
-        facingMode:{exact:'environment'}//set here the new camera
+        facingMode:'user'//set here the new camera
      }
 
   connection.addStream({audio: true, video: true});
-  connection.onstream = function(event) {
-      console.log("jghjg")
-    var video = document.getElementById(event.streamid);
-    if (video && video.parentNode) {
-        video.parentNode.removeChild(video);
-    }
-};
     }
     front() {
+        connection.streamEvents.selectAll({ 
+            local: true
+        }).forEach(function(streamEvent) {
+            streamEvent.stream.getAudioTracks()[0].stop();
+            streamEvent.stream.getVideoTracks()[0].stop();
+        });
         connection.mediaConstraints.video = {
             facingMode:'user'//set here the new camera
          }
     
         
       connection.addStream({audio: true, video: true});
-      connection.onstream = function(event) {
-        console.log("jghjg")
-      var video = document.getElementById(event.streamid);
-      if (video && video.parentNode) {
-          video.parentNode.removeChild(video);
-      }
-  };
+    
     }
     handleChangeagree(value) {
 
