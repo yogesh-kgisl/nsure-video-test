@@ -91,33 +91,34 @@ class Chat extends Component {
         })
     }
     back() {
-       
+      
         connection.mediaConstraints.video = {
-            facingMode:{exact:'environment'}//set here the new camera
-         }
-    
-    
-      connection.onstream = function(event) {
-          console.log('jhgjghj',event)
-        var video = event.mediaElement;
-        video.id = event.stream.id; // check this line ---<<------
-        document.body.appendChild(video);
-    };
-    connection.addStream({audio: true, video: true});
+        facingMode:{exact:'environment'}//set here the new camera
+     }
+
+  connection.addStream({audio: true, video: true});
+  connection.onstream = function(event) {
+      console.log("jghjg")
+    var video = document.getElementById(event.streamid);
+    if (video && video.parentNode) {
+        video.parentNode.removeChild(video);
+    }
+};
     }
     front() {
         connection.mediaConstraints.video = {
             facingMode:'user'//set here the new camera
          }
     
-    
+        
+      connection.addStream({audio: true, video: true});
       connection.onstream = function(event) {
-          console.log('jhgjghj',event)
-        var video = event.mediaElement;
-        video.id = event.stream.id; // check this line ---<<------
-        document.body.appendChild(video);
-    };
-    connection.addStream({audio: true, video: true});
+        console.log("jghjg")
+      var video = document.getElementById(event.streamid);
+      if (video && video.parentNode) {
+          video.parentNode.removeChild(video);
+      }
+  };
     }
     handleChangeagree(value) {
 
