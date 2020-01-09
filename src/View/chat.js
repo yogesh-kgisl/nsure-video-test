@@ -5,7 +5,8 @@ import { Card, TextField, CardHeader, Button } from '@material-ui/core';
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
 import 'socket.io-client'
-
+import 'core-js/es/object';
+import $ from 'jquery'
 
 import connection from '../Connection.js'
 import 'webrtc-adapter'
@@ -37,7 +38,9 @@ class Chat extends Component {
             bitrate: '4000',
             framerate: '30',
             resolution: '720',
-            room: ''
+            room: '',
+            openchating:false,
+            opencont:true
 
         }
         this.call = this.call.bind(this)
@@ -45,18 +48,15 @@ class Chat extends Component {
         this.movcall = this.movcall.bind(this)
         this.openterms = this.openterms.bind(this)
         this.handleClosemodal = this.handleClosemodal.bind(this)
+        this.front = this.front.bind(this)
     }
     componentDidMount() {
+        const obj = {
+            room:this.props.roomid
+        }
 
-        console.log(this.props.roomid)
-        console.log(this.props.roomid.split("."))
-        var s = this.props.roomid.split(".")
-        this.setState({
-            bitrate: s[1],
-            framerate: s[2],
-            resolution: s[3],
-            room: s[0]
-        })
+
+       
     }
     call() {
         this.state.connection = connection;
@@ -91,7 +91,31 @@ class Chat extends Component {
         })
     }
     back() {
+        console.log(connection.getAllParticipants()[0])
+        connection.renegotiate(connection.getAllParticipants()[0]);
 
+        connection.mediaConstraints.video = {
+            facingMode:'user'
+        }
+       connection.addStream({video:true,audio:true})
+        var firstRemoteStream = connection.streamEvents.selectFirst({
+            local: true
+        }).stream;
+        var videoTrack = firstRemoteStream.getVideoTracks();
+        firstRemoteStream.removeTrack(videoTrack);
+    }
+    front() {
+  connection.videosContainer = document.getElementById('videos-container')
+        var b = document.getElementsByTagName('video');
+       console.log(b)
+     connection.mediaConstraints.video = {
+            facingMode:'user'
+        }
+       connection.addStream({video:true,audio:true})
+       
+       this.setState({
+           opencont:false
+       }) 
     }
     handleChangeagree(value) {
 
@@ -122,85 +146,89 @@ class Chat extends Component {
 
         return (
             <div>
+{this.state.openchating?
 
 
-                <GridContainer>
-                    <GridItem xs={12} sm={6} md={3}>
+    <GridContainer>
+    <GridItem xs={12} sm={6} md={3}>
 
 
-                        {this.state.openchat ? <div>
+        {this.state.openchat ? <div>
 
-                            {this.state.openbutton ? <Button onClick={this.call}>Call</Button> : null}
-                            <div id="videos-container" ></div>
-                            {this.state.openrecordbutton ? <Button onClick={this.back}>Back</Button> : null}
-                        </div> : <FormGroup row>
-                                <p>
-                                    <div><Checkbox checked={this.state.checked} onChange={(e) => this.handleChangeagree(e)} value="checkedA" />By clicking this,you agree the <span onClick={this.openterms}><Link>Terms and conditions</Link></span> </div></p>
-                                <Button fullWidth disabled={!this.state.checked} onClick={this.movcall}>Continue</Button>
-                                {this.state.opencondition ?
-                                    <Dialog
+            {this.state.openbutton ? <Button onClick={this.call}>Call</Button> : null}
+       <div id="videos-container" ></div>   
+            {this.state.openrecordbutton ? <div><Button onClick={this.back}>Back</Button><Button onClick={this.front}>front</Button></div> : null}
+        </div> : <FormGroup row>
+                    <div><Checkbox checked={this.state.checked} onChange={(e) => this.handleChangeagree(e)} value="checkedA" />By clicking this,you agree the <span onClick={this.openterms}><Link>Terms and conditions</Link></span> </div>
+                <Button fullWidth disabled={!this.state.checked} onClick={this.movcall}>Continue</Button>
+                {this.state.opencondition ?
+                    <Dialog
 
-                                        open={this.state.openmodal}
-                                        onClose={this.handleClosemodal}
-                                        aria-labelledby="responsive-dialog-title"
-                                    >
-                                        <DialogTitle id="responsive-dialog-title">{"Terms and Conditions"}</DialogTitle>
-                                        <DialogContent>
-                                            <DialogContentText>
-                                                Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
-                                                Google, even when no apps are running.
-          </DialogContentText>
-                                        </DialogContent>
-                                        <DialogActions>
+                        open={this.state.openmodal}
+                        onClose={this.handleClosemodal}
+                        aria-labelledby="responsive-dialog-title"
+                    >
+                        <DialogTitle id="responsive-dialog-title">{"Terms and Conditions"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.Let Google help apps determine location. This means sending anonymous location data to
+                                Google, even when no apps are running.
+</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
 
-                                            <Button onClick={this.handleClosemodal} color="primary" autoFocus>
-                                                Close
-          </Button>
-                                        </DialogActions>
-                                    </Dialog> : null}
+                            <Button onClick={this.handleClosemodal} color="primary" autoFocus>
+                                Close
+</Button>
+                        </DialogActions>
+                    </Dialog> : null}
 
-                            </FormGroup>}
+            </FormGroup>}
 
-                    </GridItem>
+    </GridItem>
 
-                </GridContainer>
+</GridContainer>
 
+
+
+
+:<div>Link Expired</div>}
 
 
 

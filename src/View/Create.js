@@ -37,7 +37,7 @@ const useStyles = ({
 
 
 
-connection.socketURL = 'https://10.100.6.50:9001/';
+connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 
 connection.sdpConstraints.mandatory = {
     OfferToReceiveAudio: true,
@@ -81,7 +81,7 @@ class Create extends Component {
             resolution: '',
             bitrate: '',
             framerate: '',
-            noroom: 0
+            noroom: 5
 
         }
         this.openroom = this.openroom.bind(this);
@@ -153,10 +153,8 @@ class Create extends Component {
 
         connection.socket.emit('get-public-rooms', connection.publicRoomIdentifier, (listOfRooms) => {
             console.log('hgg', listOfRooms.length)
-            this.setState({
-                noroom: listOfRooms.length
-            })
-            if (listOfRooms.length > 1) {
+           
+            if (listOfRooms.length > this.state.noroom) {
                 connection.closeSocket();
 
             }
@@ -268,7 +266,7 @@ class Create extends Component {
     set() {
         this.setState({
 
-            roomlink: 'https://nsure-webrtc.herokuapp.com/chat/'.concat(this.state.roomid),
+            roomlink: 'https://nsure-video-test.herokuapp.com/chat/'.concat(this.state.roomid),
             loading: true
         })
         interval = setInterval(() => this.openroom(), 1000);
