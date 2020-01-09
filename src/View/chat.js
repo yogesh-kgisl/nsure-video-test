@@ -95,9 +95,9 @@ class Chat extends Component {
             if (connection.DetectRTC.hasMicrophone === true) {
                 // enable microphone
                console.log(connection.DetectRTC.videoInputDevices[1])
-                connection.mediaConstraints.video.optional = [{
+                connection.mediaConstraints.video = {
                     sourceId: connection.DetectRTC.videoInputDevices[1] //set here the new camera
-                }];
+                }
 
   connection.addStream({audio: true, video: true}); 
   connection.streamEvents.selectAll().forEach(function(streamEvent) {
