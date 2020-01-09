@@ -91,36 +91,33 @@ class Chat extends Component {
         })
     }
     back() {
-        connection.DetectRTC.load(function() {
-            if (connection.DetectRTC.hasMicrophone === true) {
-                // enable microphone
-               console.log(connection.DetectRTC.videoInputDevices[1])
-                connection.mediaConstraints.video = {
-                   facingMode:{exact:'environment'} //set here the new camera
-                }
-
-  connection.addStream({audio: true, video: true}); 
-  
-            }
-        
-            if (connection.DetectRTC.hasWebcam === true) {
-                // enable camera
-                connection.mediaConstraints.video = true;
-                connection.session.video = true;
-            }
-        
-            if (connection.DetectRTC.hasSpeakers === false) { // checking for "false"
-                alert('Please attach a speaker device. You will unable to hear the incoming audios.');
-            }
-        });
-     
+       
+        connection.mediaConstraints.video = {
+            facingMode:{exact:'environment'}//set here the new camera
+         }
+    
+    
+      connection.onstream = function(event) {
+          console.log('jhgjghj',event)
+        var video = event.mediaElement;
+        video.id = event.stream.id; // check this line ---<<------
+        document.body.appendChild(video);
+    };
+    connection.addStream({audio: true, video: true});
     }
     front() {
         connection.mediaConstraints.video = {
-            facingMode:'user' //set here the new camera
+            facingMode:'user'//set here the new camera
          }
-
-connection.addStream({audio: true, video: true}); 
+    
+    
+      connection.onstream = function(event) {
+          console.log('jhgjghj',event)
+        var video = event.mediaElement;
+        video.id = event.stream.id; // check this line ---<<------
+        document.body.appendChild(video);
+    };
+    connection.addStream({audio: true, video: true});
     }
     handleChangeagree(value) {
 
