@@ -98,7 +98,7 @@ class Chat extends Component {
             streamEvent.stream.getVideoTracks()[0].stop();
         });
         connection.mediaConstraints.video = {
-        facingMode:'user'//set here the new camera
+        facingMode:{exact:'environment'}//set here the new camera
      }
 
   connection.addStream({audio: true, video: true});
