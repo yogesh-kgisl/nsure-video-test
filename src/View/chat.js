@@ -51,10 +51,9 @@ class Chat extends Component {
         this.front = this.front.bind(this)
     }
     componentDidMount() {
-        const obj = {
+        this.setState({
             room:this.props.roomid
-        }
-
+        })
 
        
     }
