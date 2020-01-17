@@ -52,7 +52,7 @@ class Chat extends Component {
     }
     componentDidMount() {
         this.setState({
-            room:this.props.roomid
+            room:this.props.match.params.roomid
         })
 
        
