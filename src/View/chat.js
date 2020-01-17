@@ -149,8 +149,7 @@ class Chat extends Component {
 {this.state.openchating?
 
 
-    <GridContainer>
-    <GridItem xs={12} sm={6} md={3}>
+   <div>
 
 
         {this.state.openchat ? <div>
@@ -221,10 +220,8 @@ class Chat extends Component {
 
             </FormGroup>}
 
-    </GridItem>
-
-</GridContainer>
-
+   
+</div>
 
 
 
