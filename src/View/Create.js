@@ -166,7 +166,7 @@ class Create extends Component {
     openroom() {
 
 
-        connection.videosContainer = document.getElementById('videos-container');
+        connection.videosContainer = document.getElementById('videos-containers');
         connection.publicRoomIdentifier = 'KG';
         connection.session = {
             oneway: true,
@@ -306,7 +306,7 @@ class Create extends Component {
                                             <CardContent >
                                                 Video
                       {this.state.loading ? <Loading /> : null}
-                                                <div id="videos-container" className="vicon" >  </div>
+                                                <div id="videos-containers" className="vicon" >  </div>
 
                                             </CardContent>
                                             <CardFooter>
