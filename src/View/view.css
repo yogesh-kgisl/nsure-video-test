@@ -46,17 +46,30 @@
   }
 
   #videos-container video{
-    width: 100%;
-
-height:100% 
-  }
-  
-  #videos-container{
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    overflow: hidden;
-  }
- 
+    height:100% 
+      }
+    
+      #videos-container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        overflow: hidden;
+      }
+      #videos-container video::-webkit-media-controls
+      {
+          display: none;
+      }
+    
+      #videos-containers video{
+        width: 100%;
+        height:100% 
+          }
+        
+        
+          #videos-containers video::-webkit-media-controls
+          {
+              display: none;
+          }
