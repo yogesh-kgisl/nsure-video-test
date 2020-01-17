@@ -68,9 +68,8 @@ export default function Layout({ ...rest }) {
           {...rest}
         />
       {getRoute() === true ? (
-          <div className={classes.content}>
-            <div className={classes.container}><Chat roomid = {rest.match.params.roomid} /></div>
-          </div>
+         
+            <div className={classes.map}><Chat roomid = {rest.match.params.roomid} /></div>
         ) : (
           <div className={classes.content}>
             <div className={classes.container}><Viewclaim /></div>
