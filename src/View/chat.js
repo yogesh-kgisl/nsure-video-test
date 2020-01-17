@@ -156,7 +156,6 @@ class Chat extends Component {
 
             {this.state.openbutton ? <Button onClick={this.call}>Call</Button> : null}
        <div id="videos-container" ></div>   
-            {this.state.openrecordbutton ? <div><Button onClick={this.back}>Back</Button><Button onClick={this.front}>front</Button></div> : null}
         </div> : <FormGroup row>
                     <div><Checkbox checked={this.state.checked} onChange={(e) => this.handleChangeagree(e)} value="checkedA" />By clicking this,you agree the <span onClick={this.openterms}><Link>Terms and conditions</Link></span> </div>
                 <Button fullWidth disabled={!this.state.checked} onClick={this.movcall}>Continue</Button>
