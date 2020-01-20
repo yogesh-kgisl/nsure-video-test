@@ -49,6 +49,8 @@ class Chat extends Component {
         this.openterms = this.openterms.bind(this)
         this.handleClosemodal = this.handleClosemodal.bind(this)
         this.front = this.front.bind(this)
+        this.cancelconnection = this.cancelconnection.bind(this)
+
     }
     componentDidMount() {
         this.setState({
@@ -142,6 +144,19 @@ class Chat extends Component {
             opencondition: false
         })
     }
+    cancelconnection(){
+        connection.getAllParticipants().forEach(function(pid) {
+            connection.disconnectWith(pid);
+        });
+    
+        // stop all local cameras
+        connection.attachStreams.forEach(function(localStream) {
+            localStream.stop();
+        });
+    
+        // close socket.io connection
+        connection.closeSocket();
+    }
     render() {
 
         return (
@@ -156,8 +171,9 @@ class Chat extends Component {
 
        <div id="videos-container" ></div>   
        {this.state.openbutton ? <Button onClick={this.call}>Call</Button> : null}
-       {this.state.openrecordbutton ? <div><Button onClick={this.back}>Back</Button><Button onClick={this.front}>front</Button></div> : null}
-
+{this.state.openrecordbutton ? <div  id = "footer" onClick = {this.cancelconnection}> <Fab color="secondary" aria-label="add">
+     <CallEndIcon  />
+      </Fab></div> : null}
         </div> : <FormGroup row>
                     <div><Checkbox checked={this.state.checked} onChange={(e) => this.handleChangeagree(e)} value="checkedA" />By clicking this,you agree the <span onClick={this.openterms}><Link>Terms and conditions</Link></span> </div>
                 <Button fullWidth disabled={!this.state.checked} onClick={this.movcall}>Continue</Button>
