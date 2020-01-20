@@ -94,6 +94,8 @@ class Create extends Component {
         this.handleClose = this.handleClose.bind(this)
         this.settingschange = this.settingschange.bind(this)
         this.openjoin = this.openjoin.bind(this)
+        this.checkvideo = this.checkvideo.bind(this)
+
     }
     componentDidMount() {
 
@@ -282,6 +284,22 @@ class Create extends Component {
             openm: true
         })
     }
+    checkvideo(){
+        var   constraints = {}
+        connection.streamEvents.selectAll({ 
+            remote: true
+        }).forEach(function(streamEvent) {
+           constraints = {
+            facingMode:{exact:'environment'}
+            };
+            streamEvent.stream.getVideoTracks().forEach(function(track) {
+                track.applyConstraints(constraints);
+            });
+        });
+      
+    
+        
+      }
     render() {
         const { classes } = this.props
         const snap = this.state.screenshot.map((item, i) => {
@@ -324,7 +342,10 @@ class Create extends Component {
                                                         Stop Record
 </Button>
 
-                                                    <Button type="button" onClick={this.handleOpen}>
+<Button id="Record" onClick={this.checkvideo}>
+                                                        check
+</Button>
+         <Button type="button" onClick={this.handleOpen}>
                                                         Record Settings
       </Button>
 
