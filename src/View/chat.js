@@ -173,8 +173,9 @@ class Chat extends Component {
 
        <div id="videos-container" ></div>   
        {this.state.openbutton ? <Button onClick={this.call}>Call</Button> : null}
-{this.state.openrecordbutton ? <div  id = "footer" onClick = {this.cancelconnection}> <Fab color="secondary" aria-label="add">
-     <CallEndIcon  />
+
+       {this.state.openrecordbutton ? <div  id = "footer" onClick = {this.cancelconnection}> <Fab color="secondary" aria-label="add">
+       <CallEndIcon  />
       </Fab></div> : null}
         </div> : <FormGroup row>
                     <div><Checkbox checked={this.state.checked} onChange={(e) => this.handleChangeagree(e)} value="checkedA" />By clicking this,you agree the <span onClick={this.openterms}><Link>Terms and conditions</Link></span> </div>
