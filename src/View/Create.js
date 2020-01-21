@@ -177,14 +177,7 @@ class Create extends Component {
             audio: true,
             data:true
         }
-        connection.sdpConstraints = {
-            mandatory: {
-                OfferToReceiveAudio: true,
-                OfferToReceiveVideo: true
-            },
-            optional: []
-        };
-
+       
 
         connection.join(this.state.roomid, (isJoined) => {
             if (isJoined) {
@@ -199,7 +192,6 @@ class Create extends Component {
             }
         })
 
-        this.openjoin()
     }
     stoprecord() {
 
