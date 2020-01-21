@@ -58,7 +58,17 @@ class Chat extends Component {
         this.setState({
             room:this.props.match.params.roomid
         })
-
+        connection.onmessage = (event)=>{
+            console.log("khhugugugu",event)
+           if(event.data === 'front')
+           {
+               this.front()
+              
+           }
+           else{
+               this.back()
+           }
+        };
        
     }
     call() {
@@ -94,33 +104,55 @@ class Chat extends Component {
         })
     }
     back() {
-        connection.streamEvents.selectAll({ 
-            local: true
-        }).forEach(function(streamEvent) {
-            streamEvent.stream.getAudioTracks()[0].stop();
-            streamEvent.stream.getVideoTracks()[0].stop();
-        });
+     
         connection.mediaConstraints.video = {
-        facingMode:{exact:'environment'}//set here the new camera
-     }
-
-  connection.addStream({audio: true, video: true});
-    }
-    front() {
-        connection.streamEvents.selectAll({ 
-            local: true
-        }).forEach(function(streamEvent) {
-            streamEvent.stream.getAudioTracks()[0].stop();
-            streamEvent.stream.getVideoTracks()[0].stop();
-        });
-        connection.mediaConstraints.video = {
-            facingMode:'user'//set here the new camera
+                 facingMode:{exact:'environment'}//set here the new camera
+              }
+              connection.addStream({audio: true, video: true});
+             connection.streamEvents.selectAll({ 
+                 local: true
+             }).forEach(function(streamEvent) {
+                 console.log(streamEvent)
+                 streamEvent.stream.getAudioTracks()[0].stop();
+                 streamEvent.stream.getVideoTracks()[0].stop();
+                 
+             }); 
+             connection.onstreamended = function(event) {
+                 var video = document.getElementById(event.streamid);
+                 if (video && video.parentNode) {
+                     video.parentNode.removeChild(video);
+                 }
+             };
+     
+             
+     
+     
          }
-    
-        
-      connection.addStream({audio: true, video: true});
-    
-    }
+         front() {
+             connection.mediaConstraints.video = {
+                 facingMode:'user'//set here the new camera
+              }
+              
+     
+             connection.streamEvents.selectAll({ 
+                 local: true
+             }).forEach(function(streamEvent) {
+                 console.log(streamEvent)
+                 streamEvent.stream.getAudioTracks()[0].stop();
+                 streamEvent.stream.getVideoTracks()[0].stop();
+                 
+             }); 
+             connection.onstreamended = function(event) {
+                 var video = document.getElementById(event.streamid);
+                 if (video && video.parentNode) {
+                     video.parentNode.removeChild(video);
+                 }
+             };
+             connection.addStream({audio: true, video: true});
+             
+          // connection.addStream({audio: true, video: true});
+         
+         }
     handleChangeagree(value) {
 
         this.setState({

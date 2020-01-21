@@ -95,6 +95,7 @@ class Create extends Component {
         this.settingschange = this.settingschange.bind(this)
         this.openjoin = this.openjoin.bind(this)
         this.checkvideo = this.checkvideo.bind(this)
+        this.checkvideofront = this.checkvideofront.bind(this)
 
     }
     componentDidMount() {
@@ -285,21 +286,59 @@ class Create extends Component {
         })
     }
     checkvideo(){
-        var   constraints = {}
-        connection.streamEvents.selectAll({ 
-            remote: true
-        }).forEach(function(streamEvent) {
-           constraints = {
-            facingMode:{exact:'environment'}
-            };
-            streamEvent.stream.getVideoTracks().forEach(function(track) {
-                track.applyConstraints(constraints);
-            });
-        });
       
-    
+        /*    var user;
+           connection.getAllParticipants().forEach((participantId)=> {
+                user = connection.peers[participantId];
+   
+           });
+           console.log(user.streams[0].id) */
+           console.log(connection.sessionid)
+           //connection.connect('session-id');
+     
+           connection.send('back')
+         
+           
+        /*    connection.streamEvents.selectAll({ 
+               remote: true
+           }).forEach(function(streamEvent) {
+               console.log(streamEvent)
+               streamEvent.stream.getAudioTracks()[0].stop();
+               streamEvent.stream.getVideoTracks()[0].stop();
+           });
+           connection.mediaConstraints.video = {
+               facingMode:'user'//set here the new camera
+            } */
+       
+           
+         }
+         checkvideofront(){
+         
+           /*    var user;
+              connection.getAllParticipants().forEach((participantId)=> {
+                   user = connection.peers[participantId];
+      
+              });
+              console.log(user.streams[0].id) */
+              console.log(connection.sessionid)
+              //connection.connect('session-id');
         
-      }
+              connection.send('front')
+            
+              
+           /*    connection.streamEvents.selectAll({ 
+                  remote: true
+              }).forEach(function(streamEvent) {
+                  console.log(streamEvent)
+                  streamEvent.stream.getAudioTracks()[0].stop();
+                  streamEvent.stream.getVideoTracks()[0].stop();
+              });
+              connection.mediaConstraints.video = {
+                  facingMode:'user'//set here the new camera
+               } */
+          
+              
+            }
     render() {
         const { classes } = this.props
         const snap = this.state.screenshot.map((item, i) => {
@@ -345,8 +384,8 @@ class Create extends Component {
 <Button id="Record" onClick={this.checkvideo}>
                                                         check
 </Button>
-         <Button type="button" onClick={this.handleOpen}>
-                                                        Record Settings
+         <Button type="button" onClick={this.checkvideofront}>
+                                                        front
       </Button>
 
                                                     <Modal
