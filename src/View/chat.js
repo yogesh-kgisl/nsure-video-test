@@ -108,7 +108,7 @@ class Chat extends Component {
         })
     }
     back() {
-     
+        console.log("yes")
         connection.mediaConstraints.video = {
                  facingMode:{exact:'environment'}//set here the new camera
               }
@@ -133,6 +133,7 @@ class Chat extends Component {
      
          }
          front() {
+             console.log("yes")
              connection.mediaConstraints.video = {
                  facingMode:'user'//set here the new camera
               }
