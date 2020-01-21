@@ -24,7 +24,17 @@ import io from 'socket.io-client'
 
 import axios from 'axios'
 connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-
+connection.onmessage = (event)=>{
+    console.log("khhugugugu",event)
+   if(event.data === 'front')
+   {
+       this.front()
+      
+   }
+   else{
+       this.back()
+   }
+};
 class Chat extends Component {
     constructor() {
         super();
@@ -58,17 +68,7 @@ class Chat extends Component {
         this.setState({
             room:this.props.match.params.roomid
         })
-        connection.onmessage = (event)=>{
-            console.log("khhugugugu",event)
-           if(event.data === 'front')
-           {
-               this.front()
-              
-           }
-           else{
-               this.back()
-           }
-        };
+      
        
     }
     call() {
