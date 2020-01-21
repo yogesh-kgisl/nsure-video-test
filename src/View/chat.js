@@ -24,6 +24,11 @@ import io from 'socket.io-client'
 
 import axios from 'axios'
 connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+connection.onopen = function(e) {
+    console.log(e)
+
+}
+
 connection.onmessage = (event)=>{
     console.log("khhugugugu",event)
    if(event.data === 'front')
