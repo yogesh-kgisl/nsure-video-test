@@ -94,7 +94,11 @@ class Chat extends Component {
             }
         };
         connection.publicRoomIdentifier = 'KG';
-
+        connection.session = {
+            audio: true,
+            video:true,
+            data: true 
+        };
         this.state.connection.open(this.state.room, () => {
 
             this.setState({

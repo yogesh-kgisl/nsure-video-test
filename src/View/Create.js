@@ -174,7 +174,8 @@ class Create extends Component {
         connection.session = {
             oneway: true,
             video: true,
-            audio: true
+            audio: true,
+            data:true
         }
         connection.sdpConstraints = {
             mandatory: {
